@@ -9,3 +9,10 @@ Käyttö vaatii seuraavaa:
 <li>LocalAI kontti päällä määritetyssä hostissa</li>
 <li>Chatti ja TTS modelit valmiina LocalAI:ssa</li>
 </ol>
+
+Botilla on seuraavat kommennot:
+<ol>
+  <li>/summary - Tiivistää chat keskustelun ja antaa sen myös äänimuodossa</li>
+  <li>/speak - Muuttaa edellisen viestin äänimuotoon</li>
+  <li>/models - Modelin vaihtoa varten</li>
+</ol>
