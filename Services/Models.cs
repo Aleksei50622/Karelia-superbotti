@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -10,11 +11,15 @@ namespace Superbotti.Services
         public const string Chat = "chat";
         public const string Speech = "tts";
     }
-    public class Models(LocalAIClient localai)
+    
+    public class Models(LocalAIClient localai, IConfiguration config)
     {
         // Pitäisi vaihtaa hakemaan aluksi appsettingsistä ja sen jälkeen vaihtumaan komennolla
-        public string TextModel = "parable-granite-4.1-3b-claude-fable-5";
-        public string AudioModel = "qwen3-tts-cpp";
+     
+        public string TextModel { get; set; } =
+        config["LocalAI:TextModel"] ?? "";
+        public string SpeechModel { get; set; } =
+        config["LocalAI:SpeechModel"] ?? "";
 
         public Task<List<string>> GetChatModelsAsync()
         {
