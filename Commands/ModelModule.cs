@@ -30,38 +30,42 @@ namespace Superbotti.Commands
         }
     }
 
-    public abstract class ModelAutocompleteBase(Func<Task<IEnumerable<string>>> source)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="models"></param>
+    public class ChatModelAutocomplete(Models models)
     : IAutocompleteProvider<AutocompleteInteractionContext>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="option"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
         public async ValueTask<IEnumerable<ApplicationCommandOptionChoiceProperties>?> GetChoicesAsync(
             ApplicationCommandInteractionDataOption option,
             AutocompleteInteractionContext context)
         {
-            var modelList = await source();
+            var modelList = await models.GetChatModelsAsync();
 
             return modelList
-                .Take(25) // Discord has a limit of 25 choices
+                .Where(m => !string.IsNullOrWhiteSpace(m))
                 .Select(m => new ApplicationCommandOptionChoiceProperties(m, m));
         }
     }
-
     /// <summary>
-    /// Autocomplete for chat models
-    /// </summary>
-    /// <param name="models"></param>
-    public class ChatModelAutocomplete(Models models)
-        : ModelAutocompleteBase(models.GetChatModelsAsync);
-
-    /// <summary>
-    /// Autocomplete for speech models
+    /// 
     /// </summary>
     /// <param name="models"></param>
     public class SpeechModelAutocomplete(Models models)
-        : ModelAutocompleteBase(models.GetSpeechModelsAsync);
+    : IAutocompleteProvider<AutocompleteInteractionContext>
+    {
+        public async ValueTask<IEnumerable<ApplicationCommandOptionChoiceProperties>?> GetChoicesAsync(
+            ApplicationCommandInteractionDataOption option,
+            AutocompleteInteractionContext context)
+        {
+            var modelList = await models.GetSpeechModelsAsync();
+
+            return modelList
+                .Where(m => !string.IsNullOrWhiteSpace(m))
+                .Select(m => new ApplicationCommandOptionChoiceProperties(m, m));
+        }
+    }
 }
+
+    
