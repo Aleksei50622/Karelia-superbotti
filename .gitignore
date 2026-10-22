@@ -6,6 +6,13 @@
 # dotenv files
 .env
 
+
+## MEIDÄN OMA OSUUS GITIGNOREA
+
+appsettings.json
+
+
+
 # User-specific files
 *.rsuser
 *.suo
