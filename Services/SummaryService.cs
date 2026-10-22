@@ -7,11 +7,21 @@ namespace Superbotti.Services
 {
     public class SummaryService(LocalAIClient localai, Models models)
     {
+        /// <summary>
+        /// The system prompt that instructs the LLM how the summary is formed
+        /// </summary>
         private const string prompt =
             "You summarize chat conversations. Make the summary at most few paragraphs." +
-            "Try to use bullet points. Reply in the same language as the chat." +
-            "Each message is in the format username: message.";
+            "Reply in the same language as the chat." +
+            "Each message is in the format username: message" +
+            ".";
 
+        /// <summary>
+        /// Sends the summary request to LLM ánd returns the response as string
+        /// </summary>
+        /// <param name="chat"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
         public async Task<string> SummarizeAsync(string chat, CancellationToken ct = default)
         {
             var json = await localai.PostJsonAsync("/v1/chat/completions", new

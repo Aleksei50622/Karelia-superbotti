@@ -4,6 +4,10 @@ using Superbotti.Services;
 
 namespace Superbotti.Commands
     {
+    /// <summary>
+    /// Contains bot commands related to speech
+    /// </summary>
+    /// <param name="speech"></param>
         public class SpeechModule(SpeechService speech): ApplicationCommandModule<ApplicationCommandContext>
     {
         [SlashCommand("speak", "Provide audio of the previous message")]
@@ -25,6 +29,10 @@ namespace Superbotti.Commands
             }
         }
 
+        /// <summary>
+        /// Fetches the latest message containing text from Discords REST API from 10 latest messages
+        /// </summary>
+        /// <returns></returns>
         private async Task<string?> GetPreviousMessageAsync()
         {
             var messages = Context.Client.Rest.GetMessagesAsync(Context.Channel.Id,
