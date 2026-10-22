@@ -13,6 +13,11 @@ public partial class Program
         // Pitäisikö docker käynnistää samalla?
 
         var builder = Host.CreateApplicationBuilder(args);
+
+        // Asetetaan appsettings.json conffitiedostoksi. 
+        // Ylikirjoitetaan se .Local tiedoston sisällöllä. .Local tiedoston puute ei kaada sovellusta (optional = true).
+        builder.Configuration.AddJsonFile("appsettings.json", optional: false)
+.AddJsonFile("appsettings.Local.json", optional: true);
         builder.Services.AddHttpClient(LocalAIClient.HttpClientName, (sp, client) =>
         {
             var config = sp.GetRequiredService<IConfiguration>();
