@@ -27,7 +27,8 @@ public partial class Program
             .AddSingleton<SpeechService>()
             .AddSingleton<LocalAIClient>()
             .AddSingleton<Models>()
-            .AddSingleton<SummaryService>();
+            .AddSingleton<SummaryService>()
+            .AddSingleton<JokeService>();
 
         var host = builder.Build();
 
