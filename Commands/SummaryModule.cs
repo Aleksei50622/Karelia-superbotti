@@ -5,6 +5,11 @@ using Superbotti.Services;
 
 namespace Superbotti.Commands
 {
+    /// <summary>
+    /// Contains bot commands related to summarizing content
+    /// </summary>
+    /// <param name="speech"></param>
+    /// <param name="summaries"></param>
     public class SummaryModule(SpeechService speech, SummaryService summaries) : ApplicationCommandModule<ApplicationCommandContext>
     {
 
@@ -40,7 +45,11 @@ namespace Superbotti.Commands
                 await FollowupAsync($"Summary failed: {ex.Message}");
             }
         }
-
+        /// <summary>
+        /// Fetches messages from Discords REST api from current chat channel up to the given limit
+        /// </summary>
+        /// <param name="messageLimit"></param>
+        /// <returns></returns>
         private async Task<string> GetRecentMessagesAsync(int messageLimit)
         {
             List<string> lines = new();

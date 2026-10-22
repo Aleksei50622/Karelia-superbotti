@@ -14,19 +14,17 @@ namespace Superbotti.Services
     
     public class Models(LocalAIClient localai, IConfiguration config)
     {
-        // Pitäisi vaihtaa hakemaan aluksi appsettingsistä ja sen jälkeen vaihtumaan komennolla
-     
         public string TextModel { get; set; } =
         config["LocalAI:TextModel"] ?? "";
         public string SpeechModel { get; set; } =
         config["LocalAI:SpeechModel"] ?? "";
 
-        public Task<List<string>> GetChatModelsAsync()
+        public Task<IEnumerable<string>> GetChatModelsAsync()
         {
             return ListModelsAsync(Capabilities.Chat);
         }
 
-        public Task<List<string>> GetSpeechModelsAsync()
+        public Task<IEnumerable<string>> GetSpeechModelsAsync()
         {
             return ListModelsAsync(Capabilities.Speech);
         }
@@ -36,7 +34,7 @@ namespace Superbotti.Services
         /// </summary>
         /// <param name="capability"></param>
         /// <returns></returns>
-        public async Task<List<string>> ListModelsAsync(string capability)
+        public async Task<IEnumerable<string>> ListModelsAsync(string capability)
         {
             var json = await localai.GetJsonAsync("/v1/models/capabilities");
             var result = new List<string>();
