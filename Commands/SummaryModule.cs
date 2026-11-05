@@ -1,4 +1,5 @@
 ﻿using NetCord;
+using NetCord.Gateway;
 using NetCord.Rest;
 using NetCord.Services.ApplicationCommands;
 using Superbotti.Services;
@@ -60,6 +61,15 @@ namespace Superbotti.Commands
                     BatchSize = messageLimit
                 }
             );
+            var guildUsers = Context.Guild.GetUsersAsync();
+            Dictionary<string,GuildUser> users = new Dictionary<string, GuildUser>();
+
+            await foreach (var user in guildUsers)
+            {
+                users.Add(user.Username,user);
+            }
+            
+
 
             await foreach (RestMessage message in messages)
             {
@@ -67,9 +77,12 @@ namespace Superbotti.Commands
                 if (string.IsNullOrWhiteSpace(message.Content) || message.Author.IsBot)
                     continue;
 
-                var userid = await Context.Guild.GetUserAsync(message.Author.Id);
+                if (!users.TryGetValue(message.Author.Username, out var guildUser))
+                    continue;
+                  
+                    lines.Add($"{guildUser.Nickname ?? message.Author.GlobalName}: {message.Content}");
+
                 // Lisätään käyttäjän nimi jokaisen viestin alkuun AI:n tunnistettavaksi
-                lines.Add($"{userid.Nickname ?? message.Author.GlobalName}: {message.Content}");
 
                 if (lines.Count >= messageLimit)
                     break;
