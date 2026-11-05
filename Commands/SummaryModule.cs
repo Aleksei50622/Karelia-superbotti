@@ -67,8 +67,9 @@ namespace Superbotti.Commands
                 if (string.IsNullOrWhiteSpace(message.Content) || message.Author.IsBot)
                     continue;
 
+                var userid = await Context.Guild.GetUserAsync(message.Author.Id);
                 // Lisätään käyttäjän nimi jokaisen viestin alkuun AI:n tunnistettavaksi
-                lines.Add($"{message.Author.GlobalName}: {message.Content}");
+                lines.Add($"{userid.Nickname}: {message.Content}");
 
                 if (lines.Count >= messageLimit)
                     break;
