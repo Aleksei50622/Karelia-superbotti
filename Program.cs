@@ -33,7 +33,8 @@ public partial class Program
             .AddSingleton<LocalAIClient>()
             .AddSingleton<Models>()
             .AddSingleton<SummaryService>()
-            .AddSingleton<JokeService>();
+            .AddSingleton<JokeService>()
+            .AddSingleton<Voices>();
 
         var host = builder.Build();
 
