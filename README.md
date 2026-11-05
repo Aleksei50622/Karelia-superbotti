@@ -15,4 +15,5 @@ Botilla on seuraavat kommennot:
   <li>/summary - Tiivistää chat keskustelun ja antaa sen myös äänimuodossa</li>
   <li>/speak - Muuttaa edellisen viestin äänimuotoon</li>
   <li>/models - Modelin vaihtoa varten</li>
+  <li>/joke - Kertoo jonkun vitsin annetusta aiheesta</li>
 </ol>
