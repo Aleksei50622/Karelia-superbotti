@@ -23,11 +23,11 @@ namespace Superbotti.Commands
             try
             {
                 string joke = await jokes.JokeAsync(jokeSubject);
-
-                var message = new MessageProperties().WithContent(joke);
+                Stream audioResponse = await speech.TextToSpeechAsync(joke);
+                var message = new InteractionMessageProperties().WithContent(joke).AddAttachments(new AttachmentProperties("joke.wav", audioResponse));
 
                 // Kanavalle lähtevä viesti
-                await FollowupAsync(message.Content);
+                await FollowupAsync(message);
             }
             catch (HttpRequestException)
             {
