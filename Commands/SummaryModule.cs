@@ -26,13 +26,20 @@ namespace Superbotti.Commands
                 string chat = await GetRecentMessagesAsync(messageCount);
                 string chatSummary = await summaries.SummarizeAsync(chat);
                 Stream audioResponse = await speech.TextToSpeechAsync(chatSummary);
+                DMChannel userDM = await Context.User.GetDMChannelAsync();
 
-                var message = new MessageProperties().WithContent(chatSummary).AddAttachments(new AttachmentProperties("summary.wav", audioResponse));
+                var message = new MessageProperties().AddAttachments(new AttachmentProperties("summary.wav", audioResponse));
+                if (chatSummary.Length > 1900)
+                {
+                    message.WithEmbeds([new EmbedProperties().WithDescription(chatSummary)]);
+                }
+                else
+                {
+                    message.WithContent(chatSummary);
+                }
 
                 //Käyttäjälle lähtevä viesti
-                DMChannel userDM = await Context.User.GetDMChannelAsync();
                 await userDM.SendMessageAsync(message);
-
                 // Kanavalle lähtevä viesti
                 await FollowupAsync("Sent");
             }
@@ -69,8 +76,6 @@ namespace Superbotti.Commands
                 users.Add(user.Username,user);
             }
             
-
-
             await foreach (RestMessage message in messages)
             {
                 // Hylkää kaikki tyhjät ja bottien tekemät viestit listasta
