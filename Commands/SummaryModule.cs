@@ -24,7 +24,7 @@ namespace Superbotti.Commands
             try
             {
                 string chat = await GetRecentMessagesAsync(messageCount);
-                string chatSummary = await summaries.SummarizeAsync(chat);
+                string chatSummary = await MakeASummary(chat);
                 Stream audioResponse = await speech.TextToSpeechAsync(chatSummary);
 
                 var message = new MessageProperties().WithContent(chatSummary).AddAttachments(new AttachmentProperties("summary.wav", audioResponse));
@@ -46,6 +46,29 @@ namespace Superbotti.Commands
                 await FollowupAsync($"Summary failed: {ex.Message}");
             }
         }
+
+        /// <summary>
+        /// Summarize the chat until it is within max length
+        /// </summary>
+        /// <param name="chat"></param>
+        /// <returns></returns>
+        private async Task<string> MakeASummary(string chat)
+        {
+            int maxSummaryLength = 1900;
+            int maxIterations = 3;
+            int iteration = 0;
+
+            string chatSummary = await summaries.SummarizeAsync(chat);
+
+            while (chatSummary.Length > maxSummaryLength && iteration <= maxIterations)
+            {
+                chatSummary = await summaries.SummarizeAsync(chat);
+                iteration++;
+            }
+            return chatSummary;
+        }
+
+
         /// <summary>
         /// Fetches messages from Discords REST api from current chat channel up to the given limit
         /// </summary>
