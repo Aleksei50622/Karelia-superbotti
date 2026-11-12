@@ -55,17 +55,14 @@ namespace Superbotti.Commands
         private async Task<string> MakeASummary(string chat)
         {
             int maxSummaryLength = 1900;
-            int maxIterations = 3;
-            int iteration = 0;
 
             string chatSummary = await summaries.SummarizeAsync(chat);
+            string parsedSummary = await summaries.ParseSummary(chatSummary);
 
-            while (chatSummary.Length > maxSummaryLength && iteration <= maxIterations)
-            {
-                chatSummary = await summaries.SummarizeAsync(chat);
-                iteration++;
-            }
-            return chatSummary;
+            if (parsedSummary.Length <= maxSummaryLength)
+                return parsedSummary;
+
+            return parsedSummary[..maxSummaryLength] + "...";
         }
 
 
